@@ -165,6 +165,9 @@ module.exports = function ( program ) {
                                 wrench.rmdirSyncRecursive(path + '/app/views');
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/nunjucks', path + '/app/views/');
 
+                                wrench.rmdirSyncRecursive(path + '/app/controllers');
+                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/controllers/handlebars', path + '/app/controllers');
+
                                 // UPDATE SCRIPT FILE
                                 scriptFile = path + '/app/views/_inc/footer.nj';
                                 scriptContent = fs.readFileSync(scriptFile);
