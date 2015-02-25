@@ -44,7 +44,7 @@ module.exports = function ( program ) {
             var self = this;
 
             console.log('');
-            console.log('   Configuring Tesla server...');
+            console.log('   Configuring pog server...');
             console.log('   - - - - - - - - - - - - - - - - - - - - - - -');
 
             self.mkdir(path, function(){
@@ -57,15 +57,12 @@ module.exports = function ( program ) {
                     }
 
                     // UPDATE PACKAGE FILE
-                    var pkgFile = path + '/package.json',
+                    var bowerFile = path + '/bower.json',
+                        pkgFile = path + '/package.json',
                         fileContent = fs.readFileSync(pkgFile),
+                        bower = JSON.parse(fileContent),
                         pkg = JSON.parse(fileContent);
 
-
-                    // UPDATE PACKAGE FILE
-                    var bowerFile = path + '/bower.json',
-                        fileContent = fs.readFileSync(bowerFile),
-                        bower = JSON.parse(fileContent);
 
                     // UPDATE PACKAGE SETTINGS
                     pkg.name = path;
@@ -89,7 +86,7 @@ module.exports = function ( program ) {
                         data = data.toString();
 
                         // UPDATE APP NAME
-                        data = data.replace(new RegExp('tesla.js', 'g'), path);
+                        data = data.replace(new RegExp('pog', 'g'), path);
 
                         // SET CSS ENGINE
                         switch (program.css) {
@@ -120,40 +117,22 @@ module.exports = function ( program ) {
                             default:
 
                               data = data.replace(new RegExp('css : \'stylus\'', 'g'), 'css: false');
-                              cssProcessor = 'stylus';
+                              cssProcessor = false;
 
                         }
 
 
+                        var self = this, scriptFile, scriptContent, styleFile, styleContent, headSpace, bowerScripts = '', bowerStyles = '';
+
                         // SET TEMPLATING ENGINE
                         switch (program.template) {
 
-                            case 'ejs':
-
-                                console.log('   Setting view template to '.white + 'EJS'.blue);
-
-                                pkg.dependencies.ejs = 'latest';
-                                scriptTemplate = '<script src="<%= site.dir.lib %>{{src}}" ></script>' + "\n";
-                                styleTemplate = '        <link rel="stylesheet" href="<%= site.dir.lib %>{{src}}">' + "\n";
-                                data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'ejs\'');
-                                wrench.rmdirSyncRecursive(path + '/app/views');
-                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/ejs', path + '/app/views/');
-
-                                // UPDATE SCRIPT FILE
-                                var scriptFile = path + '/app/views/_inc/footer.ejs',
-                                    scriptContent = fs.readFileSync(scriptFile);
-
-                                // UPDATE STYLE FILE
-                                var styleFile = path + '/app/views/_inc/header.ejs',
-                                    styleContent = fs.readFileSync(styleFile);
-
-                                break;
 
                             case 'handlebars':
 
                                 console.log('   Setting view template to '.white + 'Handlebars'.blue);
 
-                                pkg.dependencies['hbs'] = 'latest';
+                                pkg.dependencies['koa-handlebars'] = 'latest';
                                 scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
                                 styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
                                 data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'hbs\'');
@@ -161,58 +140,36 @@ module.exports = function ( program ) {
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/handlebars', path + '/app/views/');
 
                                 // UPDATE SCRIPT FILE
-                                var scriptFile = path + '/app/views/partials/footer.hbs',
-                                    scriptContent = fs.readFileSync(scriptFile);
+                                scriptFile = path + '/app/views/partials/footer.hbs';
+                                scriptContent = fs.readFileSync(scriptFile);
 
                                 // UPDATE STYLE FILE
-                                var styleFile = path + '/app/views/partials/header.hbs',
-                                    styleContent = fs.readFileSync(styleFile);
+                                styleFile = path + '/app/views/partials/header.hbs';
+                                styleContent = fs.readFileSync(styleFile);
 
 
                                 break;
 
-                            case 'hogan':
+                            case 'nunjucks':
 
                                 console.log('   Setting view template to '.white + 'Hogan'.blue);
 
-                                var headSpace  = '        ';
+                                headSpace  = '        ';
 
-                                pkg.dependencies['hogan-middleware'] = 'latest';
+                                pkg.dependencies['koa-nunjucks'] = 'latest';
                                 scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
                                 styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
-                                data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'hogan\'');
+                                data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'nunjucks\'');
                                 wrench.rmdirSyncRecursive(path + '/app/views');
-                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/hogan', path + '/app/views/');
+                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/nunjucks', path + '/app/views/');
 
                                 // UPDATE SCRIPT FILE
-                                var scriptFile = path + '/app/views/_inc/footer.mustache',
-                                    scriptContent = fs.readFileSync(scriptFile);
+                                scriptFile = path + '/app/views/_inc/footer.nj';
+                                scriptContent = fs.readFileSync(scriptFile);
 
                                 // UPDATE STYLE FILE
-                                var styleFile = path + '/app/views/_inc/header.mustache',
-                                    styleContent = fs.readFileSync(styleFile);
-
-                                break;
-
-                            case 'mustache':
-
-                                console.log('   Setting view template to '.white + 'Mustache'.blue);
-
-                                pkg.dependencies['mustache-express'] = 'latest';
-                                scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
-                                styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
-
-                                data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'mustache\'');
-                                wrench.rmdirSyncRecursive(path + '/app/views');
-                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/mustache', path + '/app/views/');
-
-                                // UPDATE SCRIPT FILE
-                                var scriptFile = path + '/app/views/_inc/footer.mustache',
-                                    scriptContent = fs.readFileSync(scriptFile);
-
-                                // UPDATE STYLE FILE
-                                var styleFile = path + '/app/views/_inc/header.mustache',
-                                    styleContent = fs.readFileSync(styleFile);
+                                styleFile = path + '/app/views/_inc/header.nj';
+                                styleContent = fs.readFileSync(styleFile);
 
                                 break;
 
@@ -220,9 +177,9 @@ module.exports = function ( program ) {
 
                                 console.log('   Setting view template to '.white + 'Jade'.blue);
 
-                                var headSpace  = '    ';
+                                headSpace  = '    ';
 
-                                pkg.dependencies.jade = 'latest';
+                                pkg.dependencies['koa-jade'] = 'latest';
                                 scriptTemplate = "script(src='#{site.dir.lib}{{src}}')\n";
                                 styleTemplate = '    link(rel="stylesheet", href="#{site.dir.lib}{{src}}")' + "\n";
 
@@ -230,41 +187,20 @@ module.exports = function ( program ) {
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/jade', path + '/app/views/');
 
                                 // UPDATE SCRIPT FILE
-                                var scriptFile = path + '/app/views/_inc/footer.jade',
-                                    scriptContent = fs.readFileSync(scriptFile);
+                                scriptFile = path + '/app/views/_inc/footer.jade';
+                                  scriptContent = fs.readFileSync(scriptFile);
 
                                 // UPDATE STYLE FILE
-                                var styleFile = path + '/app/views/_inc/header.jade',
-                                    styleContent = fs.readFileSync(styleFile);
+                                styleFile = path + '/app/views/_inc/header.jade';
+                                styleContent = fs.readFileSync(styleFile);
 
                         }
-
-
-                        // PREPROCESSOR LIBRARIES
-                        if (program.axis) {
-                            pkg.dependencies['axis-css'] = "latest";
-                            data = data.replace(new RegExp('cssLibrary : false', 'g'), 'cssLibrary: \'axis\'');
-                            console.log('   Adding support for '.white + 'Axis'.blue);
-                        }
-                        if (program.bourbon) {
-                            pkg.dependencies['node-bourbon'] = 'latest';
-                            data = data.replace(new RegExp('cssLibrary : false', 'g'), 'cssLibrary: \'bourbon\'');
-                            console.log('   Adding support for '.white + 'Bourbon'.blue);
-                        }
-                        if (program.nib) {
-                            pkg.dependencies.nib = 'latest';
-                            data = data.replace(new RegExp('cssLibrary : false', 'g'), 'cssLibrary: \'nib\'');
-                            console.log('   Adding support for '.white + 'Nib'.blue);
-                        }
-
-                        var self = this, bowerScripts = '', bowerStyles = '';
 
                         bowerHeadScripts = '';
                         scriptContent = scriptContent.toString();
                         styleContent = styleContent.toString();
 
                         // ADD PACKAGES TO BOWER
-
 
                         // JS LIBRARIES
                         if (program.jquery) {
@@ -385,13 +321,18 @@ module.exports = function ( program ) {
 
                         // ADD CSS FILES
                         wrench.rmdirSyncRecursive(path + '/public/css');
-                        wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/css/' + cssProcessor, path + '/public/css/');
+
+                        if (cssProcessor !== false) {
+                          wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/css/' + cssProcessor, path + '/public/css/');
+                        } else {
+                          wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/css/vanilla', path + '/public/css/');
+                        }
 
                         // ADD .CACHE DIR
                         wrench.mkdirSyncRecursive(path + '/public/_cache/', 0777);
 
-                        // RENAME LICENSE TO TESLA-LICENSE
-                        fs.renameSync(path + '/LICENSE', path + '/TESLA-LICENSE')
+                        // RENAME LICENSE TO POG-LICENSE
+                        fs.renameSync(path + '/LICENSE', path + '/POG-LICENSE');
 
                         // POPULATE README FILE
                         var readmeContents = '# ' + path + '\n' + 'Information about your app should go here.';
@@ -428,14 +369,14 @@ module.exports = function ( program ) {
                 console.log('   To get up & running, you just need to run these 2 commands:'.white);
                 console.log();
                 console.log('   1. install dependencies:'.blue + '      you only need to do this once'.grey);
-                console.log('      $'.grey + ' cd %s && npm install && tesla install'.white, path);
+                console.log('      $'.grey + ' cd %s && npm install && pog install'.white, path);
                 console.log();
                 console.log('   2. launch the app with grunt:'.blue);
-                console.log('      $'.grey + ' tesla start'.white);
+                console.log('      $'.grey + ' pog start'.white);
                 console.log('');
                 console.log('');
                 console.log('   Check out the docs for help or more info: '.white);
-                console.log('   https://github.com/teslajs/tesla.js'.blue);
+                console.log('   https://github.com/pogjs/pog'.blue);
                 console.log('');
 
             });
@@ -483,7 +424,6 @@ module.exports = function ( program ) {
             fs.writeFile(path, str);
             console.log('   \x1b[36mcreate\x1b[0m : ' + path);
         }
-
 
     }
 
