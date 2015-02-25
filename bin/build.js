@@ -135,7 +135,7 @@ module.exports = function ( program ) {
                                 pkg.dependencies['koa-handlebars'] = 'latest';
                                 scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
                                 styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
-                                data = data.replace(new RegExp('template : \'jade\'', 'g'), 'template : \'hbs\'');
+                                data = data.replace(new RegExp('template : \'jade\'', 'g'), 'template : \'handlebars\'');
                                 data = data.replace(new RegExp('extension : \'.jade\'', 'g'), 'extension : \'.hbs\'');
                                 wrench.rmdirSyncRecursive(path + '/app/views');
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/handlebars', path + '/app/views/');
