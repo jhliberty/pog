@@ -135,7 +135,8 @@ module.exports = function ( program ) {
                                 pkg.dependencies['koa-handlebars'] = 'latest';
                                 scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
                                 styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
-                                data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'hbs\'');
+                                data = data.replace(new RegExp('template : \'jade\'', 'g'), 'template : \'hbs\'');
+                                data = data.replace(new RegExp('extension : \'.jade\'', 'g'), 'extension : \'.hbs\'');
                                 wrench.rmdirSyncRecursive(path + '/app/views');
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/handlebars', path + '/app/views/');
 
@@ -159,7 +160,8 @@ module.exports = function ( program ) {
                                 pkg.dependencies['koa-nunjucks'] = 'latest';
                                 scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
                                 styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
-                                data = data.replace(new RegExp('html : \'jade\'', 'g'), 'html: \'nunjucks\'');
+                                data = data.replace(new RegExp('template : \'jade\'', 'g'), 'template : \'nunjucks\'');
+                                data = data.replace(new RegExp('extension : \'.jade\'', 'g'), 'extension : \'.nj\'');
                                 wrench.rmdirSyncRecursive(path + '/app/views');
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/nunjucks', path + '/app/views/');
 
