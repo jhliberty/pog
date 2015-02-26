@@ -24,6 +24,7 @@ program
   .option('-C, --css <engine>', 'add stylesheet <engine> support (less|stylus|jade) (defaults to plain css)')
   .option('-F, --force', 'force on non-empty directory')
   .option('start', 'start the web server (still a bit buggy, best just just run "gulp" or "node server" for now)')
+  .option('slam', 'start the web server (still a bit buggy, best just just run "gulp" or "node server" for now)')
   // .option('generate', 'generate new model + controller with basic CRUD functionality')
   .option('install', 'install site dependencies')
 
@@ -363,7 +364,7 @@ if (program.install) {
 } // END INSTALL
 
 // START THE SERVER
-if (program.start) {
+if (program.start || program.slam) {
 
   spawn('gulp').stdout.on('data', function (data) {
     console.log(data.toString());
