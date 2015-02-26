@@ -63,10 +63,8 @@ var eol = os.EOL;
 
 // SET TEMPLATE ENGINE
 program.template = 'jade'; // JADE
-if ( program.html === 'ejs' ) program.template = 'ejs'; // EJS
-if ( program.html === 'hogan' ) program.template = 'hogan'; // HOGAN
+if ( program.html === 'nunjucks' ) program.template = 'nunjucks'; // EJS
 if ( program.html === 'handlebars' ) program.template = 'handlebars';  // HANDLEBARS
-if ( program.html === 'mustache' ) program.template = 'mustache';  // MUSTACHE
 
 
 // SCAFFOLDING FOR MODELS/CONTROLLERS

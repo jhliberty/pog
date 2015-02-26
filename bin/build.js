@@ -153,7 +153,7 @@ module.exports = function ( program ) {
 
                             case 'nunjucks':
 
-                                console.log('   Setting view template to '.white + 'Hogan'.blue);
+                                console.log('   Setting view template to '.white + 'Nunjucks'.blue);
 
                                 headSpace  = '        ';
 
@@ -166,15 +166,15 @@ module.exports = function ( program ) {
                                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/nunjucks', path + '/app/views/');
 
                                 wrench.rmdirSyncRecursive(path + '/app/controllers');
-                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/controllers/nunjucks', path + '/app/controllers');
+                                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/controllers/nunjucks', path + '/app/controllers');
 
                                 // UPDATE SCRIPT FILE
-                                scriptFile = path + '/app/views/_inc/footer.nj';
-                                scriptContent = fs.readFileSync(scriptFile);
+                                // scriptFile = path + '/app/views/_inc/footer.nj';
+                                // scriptContent = fs.readFileSync(scriptFile);
 
                                 // UPDATE STYLE FILE
-                                styleFile = path + '/app/views/_inc/header.nj';
-                                styleContent = fs.readFileSync(styleFile);
+                                // styleFile = path + '/app/views/_inc/header.nj';
+                                // styleContent = fs.readFileSync(styleFile);
 
                                 break;
 
@@ -193,7 +193,7 @@ module.exports = function ( program ) {
 
                                 // UPDATE SCRIPT FILE
                                 scriptFile = path + '/app/views/_inc/footer.jade';
-                                  scriptContent = fs.readFileSync(scriptFile);
+                                scriptContent = fs.readFileSync(scriptFile);
 
                                 // UPDATE STYLE FILE
                                 styleFile = path + '/app/views/_inc/header.jade';
@@ -202,8 +202,8 @@ module.exports = function ( program ) {
                         }
 
                         bowerHeadScripts = '';
-                        scriptContent = scriptContent.toString();
-                        styleContent = styleContent.toString();
+                        if ( typeof scriptContent !== 'undefined') scriptContent = scriptContent.toString();
+                        if ( typeof styleContent !== 'undefined') styleContent = styleContent.toString();
 
                         // ADD PACKAGES TO BOWER
 
@@ -320,9 +320,9 @@ module.exports = function ( program ) {
 
 
 
-                        styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), '{{bowerHead}}' + "\n" + bowerHeadScripts);
-                        styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), bowerStyles);
-                        scriptContent = scriptContent.replace(new RegExp('{{bowerFoot}}', 'g'), bowerScripts);
+                        if ( typeof styleContent !== 'undefined') styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), '{{bowerHead}}' + "\n" + bowerHeadScripts);
+                        if ( typeof styleContent !== 'undefined') styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), bowerStyles);
+                        if ( typeof styleContent !== 'undefined') scriptContent = scriptContent.replace(new RegExp('{{bowerFoot}}', 'g'), bowerScripts);
 
                         // ADD CSS FILES
                         wrench.rmdirSyncRecursive(path + '/public/css');
@@ -343,8 +343,8 @@ module.exports = function ( program ) {
                         var readmeContents = '# ' + path + '\n' + 'Information about your app should go here.';
                         fs.writeFileSync(path + '/README.md', readmeContents); // WRITE STYLES TO HEAD
 
-                        fs.writeFileSync(styleFile, styleContent); // WRITE STYLES TO HEAD
-                        fs.writeFileSync(scriptFile, scriptContent); // WRITE SCRIPTS TO FOOT
+                        if ( typeof styleContent !== 'undefined') fs.writeFileSync(styleFile, styleContent); // WRITE STYLES TO HEAD
+                        if ( typeof styleCoscriptContentntent !== 'undefined') fs.writeFileSync(scriptFile, scriptContent); // WRITE SCRIPTS TO FOOT
                         fs.writeFileSync(bowerFile, JSON.stringify(bower, null, 4)); // WRITE BOWER FILE
                         fs.writeFileSync(cfgFile, data); // WRITE CONFIG FILE
                         fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, 4)); // WRITE PACKAGE FILE
