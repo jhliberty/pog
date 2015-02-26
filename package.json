@@ -1,5 +1,5 @@
 {
-  "name": "pog-cli",
+  "name": "pog",
   "version": "0.0.1",
   "description": "Command line interface for Pog JS",
   "private": false,
