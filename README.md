@@ -22,6 +22,20 @@ $ npm install pog -g
 $ pog myapp
 ```
 
+Pog uses Jade by default, but you also have the option of handlebars or nunjucks (more coming soon).
+
+###### CREATE NEW APP WITH NUNJUCKS
+
+```
+$ pog myapp --html nunjucks
+```
+
+###### CREATE NEW APP WITH HANDLEBARS
+
+```
+$ pog myapp --html handlebars
+```
+
 
 #### START THE SERVER
 
