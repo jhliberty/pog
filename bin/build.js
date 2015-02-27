@@ -87,6 +87,8 @@ module.exports = function(program) {
 
             // UPDATE APP NAME
             data = data.replace(new RegExp('pog', 'g'), path);
+            
+            data = data.replace(new RegExp('Pog JS', 'g'), path);
 
             // SET CSS ENGINE
             switch (program.css) {

@@ -119,7 +119,7 @@ if (program.generate) {
 
   process.on('exit', function(){
     console.log('');
-    console.log('Success!'.white + ' Tesla has generated 2 new files for you:'.white);
+    console.log('Success!'.white + ' Pog has generated 2 new files for you:'.white);
     console.log('-> app/models/'.green + name.green + 'Model.js'.green);
     console.log('-> app/controllers/'.green + name.green + 'Controller.js'.green);
     console.log('');
@@ -132,7 +132,7 @@ if (program.generate) {
     console.log('');
     console.log('Be sure you set the schema for your model in '.white + 'app/models/'.blue + name.blue + '.js'.blue);
     console.log('');
-    console.log('Check out the docs for help or more info: '.white + 'https://github.com/teslajs/tesla.js#working-with-data'.blue);
+    console.log('Check out the docs for help or more info: '.white + 'https://github.com/pogjs/pog#working-with-data'.blue);
     console.log('');
   });
 
