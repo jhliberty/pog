@@ -49,7 +49,7 @@ module.exports = function(program) {
 
       self.mkdir(path, function() {
 
-        ncp(__dirname + '/_src', path, function(err) {
+        ncp(__dirname + '../../node_modules/pog-core', path, function(err) {
 
           // HANDLE ERRORS
           if (err) {
@@ -66,18 +66,20 @@ module.exports = function(program) {
 
           // UPDATE PACKAGE SETTINGS
           pkg.name = path;
-          pkg.description = "";
-          pkg.version = "0.0.1";
-          pkg.contributors = "";
-          pkg.homepage = "";
-          pkg.repository = "";
-          pkg.bugs = "";
-          pkg.licenses = "";
+          pkg.description = '';
+          pkg.version = '0.0.1';
+          pkg.contributors = '';
+          pkg.homepage = '';
+          pkg.repository = '';
+          pkg.bugs = '';
+          pkg.licenses = '';
 
           // OPEN CONFIG FILE
           var cfgFile = path + '/config/_settings.js';
 
           fs.readFile(cfgFile, function(err, data) {
+
+            var cssProcessor;
 
             if (err) {
               return console.error(err);
@@ -124,8 +126,7 @@ module.exports = function(program) {
             }
 
 
-            var self = this,
-              scriptFile, scriptContent, styleFile, styleContent, headSpace, bowerScripts = '',
+            var scriptFile, scriptContent, scriptTemplate, styleFile, styleContent, styleTemplate, headSpace, bowerScripts = '',
               bowerStyles = '';
 
             // SET TEMPLATING ENGINE
@@ -137,12 +138,12 @@ module.exports = function(program) {
                 console.log('   Setting view template to '.white + 'Handlebars'.blue);
 
                 pkg.dependencies['koa-handlebars'] = 'latest';
-                scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
-                styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
+                scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + '\n';
+                styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + '\n';
                 data = data.replace(new RegExp('template : \'jade\'', 'g'), 'template : \'handlebars\'');
                 data = data.replace(new RegExp('extension : \'.jade\'', 'g'), 'extension : \'.hbs\'');
                 wrench.rmdirSyncRecursive(path + '/app/views');
-                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/handlebars', path + '/app/views/');
+                wrench.copyDirSyncRecursive(path + '/lib/templates/views/handlebars', path + '/app/views/');
 
                 // UPDATE SCRIPT FILE
                 scriptFile = path + '/app/views/partials/foot.hbs';
@@ -162,15 +163,15 @@ module.exports = function(program) {
                 headSpace = '        ';
 
                 pkg.dependencies['koa-nunjucks'] = 'latest';
-                scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + "\n";
-                styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + "\n";
+                scriptTemplate = '<script src="{{site.dir.lib}}{{src}}" ></script>' + '\n';
+                styleTemplate = '        <link rel="stylesheet" href="{{site.dir.lib}}{{src}}">' + '\n';
                 data = data.replace(new RegExp('template : \'jade\'', 'g'), 'template : \'nunjucks\'');
                 data = data.replace(new RegExp('extension : \'.jade\'', 'g'), 'extension : \'.nj\'');
                 wrench.rmdirSyncRecursive(path + '/app/views');
-                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/nunjucks', path + '/app/views/');
+                wrench.copyDirSyncRecursive(path + '/lib/templates/views/nunjucks', path + '/app/views/');
 
                 wrench.rmdirSyncRecursive(path + '/app/controllers');
-                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/controllers/nunjucks', path + '/app/controllers');
+                wrench.copyDirSyncRecursive(path + '/lib/templates/controllers/nunjucks', path + '/app/controllers');
 
                 // UPDATE SCRIPT FILE
                 // scriptFile = path + '/app/views/_inc/foot.nj';
@@ -189,11 +190,11 @@ module.exports = function(program) {
                 headSpace = '    ';
 
                 pkg.dependencies['koa-jade'] = 'latest';
-                scriptTemplate = "script(src='#{site.dir.lib}{{src}}')\n";
-                styleTemplate = '    link(rel="stylesheet", href="#{site.dir.lib}{{src}}")' + "\n";
+                scriptTemplate = 'script(src=\'#{site.dir.lib}{{src}}\')\n';
+                styleTemplate = '    link(rel="stylesheet", href="#{site.dir.lib}{{src}}")' + '\n';
 
                 wrench.rmdirSyncRecursive(path + '/app/views');
-                wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/jade', path + '/app/views/');
+                wrench.copyDirSyncRecursive(path + '/lib/templates/views/jade', path + '/app/views/');
 
                 // UPDATE SCRIPT FILE
                 scriptFile = path + '/app/views/_inc/foot.jade';
@@ -205,7 +206,7 @@ module.exports = function(program) {
 
             }
 
-            bowerHeadScripts = '';
+            var bowerHeadScripts = '';
             if (typeof scriptContent !== 'undefined') scriptContent = scriptContent.toString();
             if (typeof styleContent !== 'undefined') styleContent = styleContent.toString();
 
@@ -255,9 +256,9 @@ module.exports = function(program) {
               data = data.replace(new RegExp('socket : false', 'g'), 'socket : true');
 
               if (program.template === 'jade') {
-                bowerScripts = bowerScripts + "script(src='#{site.dir.js}/socket.js')";
+                bowerScripts = bowerScripts + 'script(src="#{site.dir.js}/socket.js")';
               } else {
-                bowerScripts = bowerScripts + "<script src='#{site.dir.js}/socket.js'></script>";
+                bowerScripts = bowerScripts + '<script src="#{site.dir.js}/socket.js"></script>';
               }
 
               bower.dependencies['socket.io-client'] = 'latest';
@@ -324,7 +325,7 @@ module.exports = function(program) {
 
 
 
-            if (typeof styleContent !== 'undefined') styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), '{{bowerHead}}' + "\n" + bowerHeadScripts);
+            if (typeof styleContent !== 'undefined') styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), '{{bowerHead}}' + '\n' + bowerHeadScripts);
             if (typeof styleContent !== 'undefined') styleContent = styleContent.replace(new RegExp('{{bowerHead}}', 'g'), bowerStyles);
             if (typeof styleContent !== 'undefined') scriptContent = scriptContent.replace(new RegExp('{{bowerFoot}}', 'g'), bowerScripts);
 
@@ -332,9 +333,9 @@ module.exports = function(program) {
             wrench.rmdirSyncRecursive(path + '/public/css');
 
             if (cssProcessor !== false) {
-              wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/css/' + cssProcessor, path + '/public/css/');
+              wrench.copyDirSyncRecursive(path + '/lib/templates/css/' + cssProcessor, path + '/public/css/');
             } else {
-              wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/css/vanilla', path + '/public/css/');
+              wrench.copyDirSyncRecursive(path + '/lib/templates/css/vanilla', path + '/public/css/');
             }
 
             // ADD .CACHE DIR
@@ -364,8 +365,8 @@ module.exports = function(program) {
 
         // CLEANUP UNUSED STUFF
 
-        if (fs.existsSync(path + '/lib/templates')) wrench.rmdirSyncRecursive(path + '/lib/templates');
-        if (fs.existsSync(path + '/.git')) wrench.rmdirSyncRecursive(path + '/.git');
+        // if (fs.existsSync(path + '/lib/templates')) wrench.rmdirSyncRecursive(path + '/lib/templates');
+        // if (fs.existsSync(path + '/.git')) wrench.rmdirSyncRecursive(path + '/.git');
         if (fs.existsSync(path + '/.jshintrc')) fs.unlink(path + '/.jshintrc');
         if (fs.existsSync(path + '/bower.json')) fs.unlink(path + '/bower.json');
 
@@ -380,8 +381,8 @@ module.exports = function(program) {
         console.log('   1. install dependencies:'.blue + '      you only need to do this once'.grey);
         console.log('      $'.grey + ' cd %s && npm install && pog install'.white, path);
         console.log();
-        console.log('   2. launch the app with grunt:'.blue);
-        console.log('      $'.grey + ' pog start'.white);
+        console.log('   2. launch the app with gulp:'.blue);
+        console.log('      $'.grey + ' gulp start'.white);
         console.log('');
         console.log('');
         console.log('   Check out the docs for help or more info: '.white);
@@ -395,7 +396,7 @@ module.exports = function(program) {
     // Check if the given directory `path` is empty.
     emptyDirectory: function(path, fn) {
       fs.readdir(path, function(err, files) {
-        if (err && 'ENOENT' != err.code) throw err;
+        if (err && 'ENOENT' !== err.code) throw err;
         fn(!files || !files.length);
       });
     },
@@ -404,8 +405,7 @@ module.exports = function(program) {
     mkdir: function(path, fn) {
       mkdirp(path, 0755, function(err) {
         if (err) throw err;
-        // console.log('   \033[36mcreate\033[0m : ' + path);
-        fn && fn();
+        return fn && fn();
       });
     },
 
@@ -415,8 +415,8 @@ module.exports = function(program) {
       var self = this;
 
       if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach(function(file, index) {
-          var curPath = path + "/" + file;
+        fs.readdirSync(path).forEach(function(file) {
+          var curPath = path + '/' + file;
           if (fs.statSync(curPath).isDirectory()) { // recurse
             self.rmdir(curPath);
           } else { // delete file
@@ -434,6 +434,6 @@ module.exports = function(program) {
       console.log('   \x1b[36mcreate\x1b[0m : ' + path);
     }
 
-  }
+  };
 
 };
