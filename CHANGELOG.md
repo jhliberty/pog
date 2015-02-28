@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.10
+- update to latest pog core
+
 ## 0.0.9
 - make sure files exist before attempting to delete
 
