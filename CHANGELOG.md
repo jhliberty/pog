@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.8
+- add changelog
+
 ## 0.0.7
 - cleanup build process
 - update to latest pog core
