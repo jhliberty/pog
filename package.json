@@ -1,6 +1,6 @@
 {
   "name": "pog",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Command line interface for Pog JS",
   "private": false,
   "author": {
