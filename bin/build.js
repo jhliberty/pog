@@ -87,7 +87,7 @@ module.exports = function(program) {
 
             // UPDATE APP NAME
             data = data.replace(new RegExp('pog', 'g'), path);
-            
+
             data = data.replace(new RegExp('Pog JS', 'g'), path);
 
             // SET CSS ENGINE
@@ -145,11 +145,11 @@ module.exports = function(program) {
                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/handlebars', path + '/app/views/');
 
                 // UPDATE SCRIPT FILE
-                scriptFile = path + '/app/views/partials/footer.hbs';
+                scriptFile = path + '/app/views/partials/foot.hbs';
                 scriptContent = fs.readFileSync(scriptFile);
 
                 // UPDATE STYLE FILE
-                styleFile = path + '/app/views/partials/header.hbs';
+                styleFile = path + '/app/views/partials/head.hbs';
                 styleContent = fs.readFileSync(styleFile);
 
 
@@ -173,11 +173,11 @@ module.exports = function(program) {
                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/controllers/nunjucks', path + '/app/controllers');
 
                 // UPDATE SCRIPT FILE
-                // scriptFile = path + '/app/views/_inc/footer.nj';
+                // scriptFile = path + '/app/views/_inc/foot.nj';
                 // scriptContent = fs.readFileSync(scriptFile);
 
                 // UPDATE STYLE FILE
-                // styleFile = path + '/app/views/_inc/header.nj';
+                // styleFile = path + '/app/views/_inc/head.nj';
                 // styleContent = fs.readFileSync(styleFile);
 
                 break;
@@ -196,11 +196,11 @@ module.exports = function(program) {
                 wrench.copyDirSyncRecursive(__dirname + '/_src/lib/templates/views/jade', path + '/app/views/');
 
                 // UPDATE SCRIPT FILE
-                scriptFile = path + '/app/views/_inc/footer.jade';
+                scriptFile = path + '/app/views/_inc/foot.jade';
                 scriptContent = fs.readFileSync(scriptFile);
 
                 // UPDATE STYLE FILE
-                styleFile = path + '/app/views/_inc/header.jade';
+                styleFile = path + '/app/views/_inc/head.jade';
                 styleContent = fs.readFileSync(styleFile);
 
             }
@@ -363,12 +363,11 @@ module.exports = function(program) {
       process.on('exit', function() {
 
         // CLEANUP UNUSED STUFF
+        wrench.rmdirSyncRecursive(path + '/lib/templates');
+        wrench.rmdirSyncRecursive(path + '/.git');
+        fs.unlink(path + '/.jshintrc');
+        fs.unlink(path + '/bower.json');
 
-        ncp(__dirname + '/_src/app/_templates', path + '_lib', function(err) {
-          self.rmdir(path + '/app/_templates');
-        });
-
-        fs.unlink(path + '/.git');
 
         // LET USER KNOW WE'RE DONE
         console.log('   - - - - - - - - - - - - - - - - - - - - - - -');
