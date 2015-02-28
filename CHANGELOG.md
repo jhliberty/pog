@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.11
+- remove bin/\_src in favor of adding core to dependencies
+- add badges to readme
+- update LICENSE
+
 ## 0.0.10
 - update to latest pog core
 
