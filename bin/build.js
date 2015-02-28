@@ -363,10 +363,11 @@ module.exports = function(program) {
       process.on('exit', function() {
 
         // CLEANUP UNUSED STUFF
-        wrench.rmdirSyncRecursive(path + '/lib/templates');
-        wrench.rmdirSyncRecursive(path + '/.git');
-        fs.unlink(path + '/.jshintrc');
-        fs.unlink(path + '/bower.json');
+
+        if (fs.existsSync(path + '/lib/templates')) wrench.rmdirSyncRecursive(path + '/lib/templates');
+        if (fs.existsSync(path + '/.git')) wrench.rmdirSyncRecursive(path + '/.git');
+        if (fs.existsSync(path + '/.jshintrc')) fs.unlink(path + '/.jshintrc');
+        if (fs.existsSync(path + '/bower.json')) fs.unlink(path + '/bower.json');
 
 
         // LET USER KNOW WE'RE DONE
