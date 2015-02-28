@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.9
+- make sure files exist before attempting to delete
+
 ## 0.0.8
 - add changelog
 
