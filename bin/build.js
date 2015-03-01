@@ -365,8 +365,9 @@ module.exports = function(program) {
 
         // CLEANUP UNUSED STUFF
 
-        // if (fs.existsSync(path + '/lib/templates')) wrench.rmdirSyncRecursive(path + '/lib/templates');
-        // if (fs.existsSync(path + '/.git')) wrench.rmdirSyncRecursive(path + '/.git');
+        if (fs.existsSync(path + '/lib/templates')) wrench.rmdirSyncRecursive(path + '/lib/templates');
+        if (fs.existsSync(path + '/node_modules')) wrench.rmdirSyncRecursive(path + '/node_modules');
+        if (fs.existsSync(path + '/CHANGELOG.md')) fs.unlink(path + '/CHANGELOG.md');
         if (fs.existsSync(path + '/.jshintrc')) fs.unlink(path + '/.jshintrc');
         if (fs.existsSync(path + '/bower.json')) fs.unlink(path + '/bower.json');
 
