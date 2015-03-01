@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.12
+- better file cleanup after install
+- update to latest pog core
+
 ## 0.0.11
 - remove bin/\_src in favor of adding core to dependencies
 - add badges to readme
