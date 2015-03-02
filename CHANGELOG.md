@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.13
+- update to latest pog core
+
 ## 0.0.12
 - better file cleanup after install
 - update to latest pog core
