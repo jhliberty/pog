@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.0.16
+- update to latest pog core
+
 ## 0.0.15
 - update to latest pog core
 
