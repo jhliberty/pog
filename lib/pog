@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const Pog = {},
+var Pog = {},
       build = require('../lib/build')(),
       fs = require('fs'),
       growly = require('growly'),
