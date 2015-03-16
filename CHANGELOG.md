@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.2
+- update to latest pog core
+
 ## 0.1.1
 - remove old growl require from inform.js
 
