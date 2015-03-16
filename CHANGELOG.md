@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.1
+- remove old growl require from inform.js
+
 ## 0.1.0
 *refactor to allow new guider install process*
 - add cli-prompt for new guided install flow
