@@ -1,0 +1,168 @@
+#!/usr/bin/env node
+'use strict';
+
+const Pog = {},
+      build = require('../lib/build')(),
+      fs = require('fs'),
+      growly = require('growly'),
+      inform = require('../lib/inform')(),
+      meow = require('meow'),
+      path = require('path'),
+      pkg = require('../package.json'),
+      prompt = require('cli-prompt'),
+      icon = path.join(__dirname, '../') + 'lib/pog.png',
+      updateNotifier = require('update-notifier');
+      require('colors');
+
+growly.register('Pog', icon);
+
+var cli = meow({
+  pkg: pkg
+});
+
+var args = cli.input;
+var cmd = args[0];
+
+if ( cmd === 'test' ) {
+
+  inform.done({name: 'My App'});
+
+} else if ( cmd === 'install' ) {
+
+  var buffspawn = require('buffered-spawn');
+
+  buffspawn('bower', ['install'], function (err, stdout, stderr) {
+      if (err) {
+
+        if ( err.code === 'ECMDERR' ) {
+          console.log('');
+          console.log('   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.red);
+          console.log('   ERROR: '.red + ' Could not install bower dependencies.'.white);
+          console.log('   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.red);
+          console.log('');
+          console.log(err);
+          console.log('');
+          console.log('   Aborting...'.yellow);
+          console.log('');
+
+          growly.notify( 'Could not install bower dependencies.', { title: 'Error!' });
+
+        } else {
+          console.log('');
+          console.log('   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.red);
+          console.log('   ERROR: '.red + ' Bower is not installed, or incorrectly configured.'.white);
+          console.log('   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.red);
+          console.log('');
+          console.log('   Please install bower and try again.'.white);
+          console.log('');
+          console.log(err.code);
+          console.log('');
+          console.log('   Aborting...'.yellow);
+          console.log('');
+
+          growly.notify( 'Bower is not installed, or incorrectly configured.', { title: 'Error!' });
+
+        }
+
+
+      } else {
+
+        console.log('');
+        console.log('   INFO: '.blue + 'Installing bower dependencies (this could take a moment)...'.white);
+
+        var install = require('../lib/install')();
+        install.bower();
+      }
+
+  });
+
+} else if ( cmd === 'bower' ) {
+
+  var buffspawn = require('buffered-spawn');
+
+  buffspawn('bower', ['install'], function (err, stdout, stderr) {
+      if (err) {
+        console.log('');
+        console.log('   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.red);
+        console.log('   ERROR: '.red + ' bower is not installed, or incorrectly configured.'.white);
+        console.log('   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'.red);
+        console.log('');
+        console.log('   Please install bower and try again.'.white);
+        console.log('');
+        console.log('   Aborting...'.yellow);
+        console.log('');
+      } else {
+
+        console.log('');
+        console.log('   INFO: '.blue + 'Installing bower dependencies (this could take a moment)...'.white);
+
+        var install = require('../lib/install')();
+        install.bower();
+      }
+
+  });
+
+} else if ( cmd === 'generate' ) {
+
+  var generate = require('../lib/generate')();
+
+  generate.model( args[1], cli.flags.db );
+
+} else if ( cli.flags.v || cli.flags.V ) {
+
+  console.log(cli.pkg.version);
+
+// } else if ( cli.flags.h || cli.flags.H || cli.flags.help ) {
+
+} else {
+  // TELL USER WE'RE STARTING THE PROCESS
+  inform.start();
+
+  // GET SOME INFO FROM THE USER
+  prompt.multi([
+
+    // SET APP NAME
+    {
+      label: '   App name',
+      key: 'name',
+      'default': 'My App'
+    },
+
+    // HTML
+    {
+      label: '   Select a '.white + 'templating language '.blue + '( jade | handlebars | nunjucks )'.white,
+      key: 'html',
+      'default': 'jade'
+    },
+
+    // CSS
+    {
+      label: '   Select a '.white + 'templating language '.blue + '( stylus | sass | less )'.white,
+      key: 'css',
+      'default': 'stylus'
+    },
+
+    // BOWER PACKAGES
+    {
+      label: '   Would you like to add any '.white + 'bower'.blue + ' packages?'.white,
+      key: 'bower',
+      type: 'array',
+      'default': 'no'
+    },
+
+    // ENABLE SOCKETS
+    {
+      label: '   Enable '.white + 'socket.io'.blue + ' ( yes | no )'.white,
+      key: 'sockets',
+      type: 'boolean',
+      'default': 'no'
+    },
+  ], function(data) {
+
+    data.pathName = data.name.split(' ').join('-').toLowerCase();
+
+    build.init(data);
+
+
+  });
+}

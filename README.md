@@ -8,7 +8,7 @@ Pog is a modern MVC style framework built on top of [io.js](http://iojs.org) and
 
 It's a work in progress, check back often for updates.
 
-Full documentation will be coming soon. 
+Full documentation will be coming soon.
 
 
 #### DEPENDENCIES
@@ -25,27 +25,16 @@ $ npm install pog -g
 #### CREATE A NEW APP
 
 ```
-$ pog myapp
+$ pog
 ```
 
-Pog uses Jade by default, but you also have the option of handlebars or nunjucks (more coming soon).
-
-###### CREATE NEW APP WITH NUNJUCKS
-
-```
-$ pog myapp --html nunjucks
-```
-
-###### CREATE NEW APP WITH HANDLEBARS
-
-```
-$ pog myapp --html handlebars
-```
+This will ask you a few questions to help customize your app, and then you'll be all set.
 
 
 #### START THE SERVER
 
 Assuming you have io.js installed
+
 ```
 $ gulp start
 ```
@@ -56,8 +45,20 @@ or
 $ iojs server.js
 ```
 
-or
+or if you prefer to stick with node and have at least version 0.12 installed:
 
 ```
 $ node --harmony server.js
 ```
+
+
+## Getting Started Guide
+A full getting starting guide is in the works, in the meantime, check out the docs below (still a work in progress).
+
+
+
+## Docs
+
+[Config](docs/config.md)
+
+[Models](docs/models.md)

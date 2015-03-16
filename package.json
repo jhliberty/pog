@@ -1,6 +1,6 @@
 {
   "name": "pog",
-  "version": "0.0.13",
+  "version": "0.1.0",
   "description": "Command line interface for Pog JS",
   "private": false,
   "author": {
@@ -19,7 +19,7 @@
     "url": "https://github.com/pogjs/pog/issues"
   },
   "bin": {
-    "pog": "./bin/pog"
+    "pog": "./lib/pog"
   },
   "licenses": [
     {
@@ -28,11 +28,17 @@
     }
   ],
   "dependencies": {
+    "buffered-spawn": "^1.0.1",
+    "cli-prompt": "^0.4.1",
     "colors": "~1.0.3",
-    "commander": "~1.3.2",
+    "growly": "^1.2.0",
+    "log-notify": "^0.2.2",
+    "meow": "~3.1.0",
     "mkdirp": "~0.5.0",
     "ncp": "~2.0.0",
-    "pog-core": "~0.3.0",
+    "pog-core": "~0.4.2",
+    "prepend": "^1.0.2",
+    "update-notifier": "^0.3.1",
     "wrench": "~1.5.8"
   }
 }

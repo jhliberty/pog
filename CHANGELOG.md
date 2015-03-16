@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0
+*refactor to allow new guider install process*
+- add cli-prompt for new guided install flow
+- replace commander with meow
+- add growly for glow notifications
+- use buffered-spawn to bower install via pog install
+- pog install now works for setting up bower files
+- pog generate generates basic models & controllers
+
 ## 0.0.13
 - update to latest pog core
 
