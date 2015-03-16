@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.3
+- change const to var for non iojs installs
+
 ## 0.1.2
 - update to latest pog core
 
